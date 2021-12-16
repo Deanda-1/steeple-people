@@ -1,0 +1,19 @@
+{
+  "name": "steeple-people",
+  "version": "1.0.0",
+  "description": "A God hub for everything Jesus.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zartender/steeple-people.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zartender/steeple-people/issues"
+  },
+  "homepage": "https://github.com/Zartender/steeple-people#readme"
+}
