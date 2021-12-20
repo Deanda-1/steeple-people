@@ -41,7 +41,7 @@ export const saveComment = (commentData, token) => {
 };
 
 // remove saved book data for a logged in user
-export const deleteBook = (commentId, token) => {
+export const deleteComment = (commentId, token) => {
   return fetch(`/api/users/comment/${commentId}`, {
     method: 'DELETE',
     headers: {
@@ -52,7 +52,7 @@ export const deleteBook = (commentId, token) => {
 
 // make a search to google books api
 // https://www.googleapis.com/books/v1/volumes?q=harry+potter
-export const searchGoogleBooks = (query) => {
-  return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
-};
+// export const searchGoogleComments = (query) => {
+//   return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
+// };
 
