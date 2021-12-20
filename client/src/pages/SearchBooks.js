@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
+// import { brideOfChrist2 } from  '../../images';
 
 import Auth from '../utils/auth';
 // eslint-disable-next-line
@@ -84,6 +85,9 @@ const SearchBooks = () => {
     }
   };
 
+  // const jumboStyle {
+  //   backgroundImage: `url(${brideOfChrist2})`
+  // }
   return (
     <>
       <Jumbotron fluid className='text-light bg-dark'>
