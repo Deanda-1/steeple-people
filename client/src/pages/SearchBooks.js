@@ -3,39 +3,39 @@ import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'reac
 
 import Auth from '../utils/auth';
 // eslint-disable-next-line
-import { saveBook, searchGoogleBooks } from '../utils/API';
-import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { saveComment, searchGoogleComments } from '../utils/API';
+import { saveCommentIds, getSavedCommentIds } from '../utils/localStorage';
 
 import { useMutation } from '@apollo/react-hooks';
-import { SAVE_BOOK } from '../utils/mutations';
+import { SAVE_COMMENT } from '../utils/mutations';
 
-const SearchBooks = () => {
+const SearchComments = () => {
 // eslint-disable-next-line
-  const saveBook = useMutation(SAVE_BOOK);
+  const saveComment = useMutation(SAVE_COMMENT);
   // create state for holding returned google api data
-  const [searchedBooks, setSearchedBooks] = useState([]);
+  const [searchedComments, setSearchedComments] = useState([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
-  // create state to hold saved bookId values
-  const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  // create state to hold saved CommentId values
+  const [savedCommentIds, setSavedCommentIds] = useState(getSavedCommentIds());
 
-  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
+  // set up useEffect hook to save `savedCommentIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
-    return () => saveBookIds(savedBookIds);
+    return () => saveCommentIds(savedCommentIds);
   });
 
-  // create method to search for books and set state on form submit
+  // create method to search for Comments and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     if (!searchInput) {
       return false;
     }
-
+// Not going to need this function
     try {
-      const response = await searchGoogleBooks(searchInput);
+      const response = await searchGoogleComments(searchInput);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -43,25 +43,27 @@ const SearchBooks = () => {
 
       const { items } = await response.json();
 
-      const bookData = items.map((book) => ({
-        bookId: book.id,
-        authors: book.volumeInfo.authors || ['No author to display'],
-        title: book.volumeInfo.title,
-        description: book.volumeInfo.description,
-        image: book.volumeInfo.imageLinks?.thumbnail || '',
+      const commentData = items.map((comment) => ({
+        commentId: comment.id,
+        authors: comment.volumeInfo.authors || ['No author to display'],
+        title: comment.volumeInfo.title,
+        description: comment.volumeInfo.description,
+        image: comment.volumeInfo.imageLinks?.thumbnail || '',
       }));
 
-      setSearchedBooks(bookData);
+      setSearchedComments(commentData);
       setSearchInput('');
     } catch (err) {
       console.error(err);
     }
   };
 
-  // create function to handle saving a book to our database
-  const handleSaveBook = async (bookId) => {
-    // find the book in `searchedBooks` state by the matching id
-    const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+  // create function to handle saving a Comment to our database
+  const handleSaveComment = async (commentId) => {
+    // find the book in `searchedComment` state by the matching id
+    // Not necessary
+
+    const commentToSave = searchedComments.find((comment) => comment.commentId === commentId);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -71,14 +73,14 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      const response = await saveComment(commentToSave, token);
     
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
 
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
+      setSavedBookIds([...savedCommentIds, commentToSave.commentId]);
     } catch (err) {
       console.error(err);
     }
@@ -114,28 +116,28 @@ const SearchBooks = () => {
       <Container>
         <h2>
           {searchedBooks.length
-            ? `Viewing ${searchedBooks.length} results:`
+            ? `Viewing ${searchedComments.length} results:`
             : 'Search for a bible topic to begin'}
         </h2>
         <CardColumns>
-          {searchedBooks.map((book) => {
+          {searchedComments.map((comment) => {
             return (
-              <Card key={book.bookId} border='dark'>
-                {book.image ? (
-                  <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
+              <Card key={comment.commentId} border='dark'>
+                {comment.image ? (
+                  <Card.Img src={comment.image} alt={`The cover for ${comment.title}`} variant='top' />
                 ) : null}
                 <Card.Body>
-                  <Card.Title>{book.title}</Card.Title>
-                  <p className='small'>Authors: {book.authors}</p>
-                  <Card.Text>{book.description}</Card.Text>
+                  <Card.Title>{comment.title}</Card.Title>
+                  <p className='small'>Authors: {comment.authors}</p>
+                  <Card.Text>{comment.description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
+                      disabled={savedCommentIds?.some((savedCommentId) => savedCommentId === comment.commentId)}
                       className='btn-block btn-info'
-                      onClick={() => handleSaveBook(book.bookId)}>
-                      {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
-                        ? 'This book has already been saved!'
-                        : 'Save this Book!'}
+                      onClick={() => handleSaveComment(comment.commentId)}>
+                      {savedCommentIds?.some((savedCommentId) => savedCommentId === comment.commentId)
+                        ? 'This comment has already been saved!'
+                        : 'Save this Comment!'}
                     </Button>
                   )}
                 </Card.Body>
