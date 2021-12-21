@@ -4,15 +4,20 @@ import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'reac
 
 import Auth from '../utils/auth';
 // eslint-disable-next-line
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { saveMyBook, searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
 import { useMutation } from '@apollo/react-hooks';
-import { SAVE_BOOK } from '../utils/mutations';
+// import { SAVE_BOOK } from '../utils/mutations';
+
+
 
 const SearchBooks = () => {
 // eslint-disable-next-line
-  const saveBook = useMutation(SAVE_BOOK);
+  // const saveBook = useMutation(SAVE_BOOK);
+
+  // const [saveBook , {error} ] = useMutation(SAVE_BOOK);
+
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
@@ -20,6 +25,8 @@ const SearchBooks = () => {
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+
+  //console.log("Mutations ", saveBook); 
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -72,11 +79,15 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      console.log("Book to save data ", bookToSave, "token is ", token ); 
+      const response = await saveMyBook(bookToSave, token);
     
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
+
+     
+      console.log(savedBookIds);
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
@@ -84,6 +95,7 @@ const SearchBooks = () => {
       console.error(err);
     }
   };
+
 
   // const jumboStyle {
   //   backgroundImage: `url(${brideOfChrist2})`
