@@ -19,6 +19,10 @@ const client = new ApolloClient({
   uri: '/graphql',
 });
 
+
+
+
+
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -35,5 +39,7 @@ function App() {
     </ApolloProvider>
   );
 }
+
+
 
 export default App;
